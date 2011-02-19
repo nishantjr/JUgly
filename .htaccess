@@ -1,0 +1,4 @@
+# Options +FollowSymlinks
+RewriteEngine off
+# RewriteRule   ^(.*)$ index.php?page=Enquiry [QSA,L]
+# RewriteRule .* - [L]
