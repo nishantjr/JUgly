@@ -2,14 +2,7 @@
 class EditPage extends BasePage{
   function __construct($request) {
     $articleId = intval($request["article"]);
-//     if(!isset($request["password"]) or $request["password"]!='username') {
-//       echo "What's the password??
-// 	    <form method='post'>
-// 	      <input type='password' name='password'/>
-// 	      <input type='submit'>
-// 	    </form>";
-//       die();
-//     }
+
     $this->article = ArticleModel::getInstance($articleId);
   }
   function echoHead()
@@ -21,6 +14,7 @@ class EditPage extends BasePage{
   }
 
   function echoContent() {
+    global $config;
     echo "<form class='info-list' method='post' action='?article=".$this->article["id"]."'>";
     echo "<span class='dev-note'>Entrys marked with a * will be used if available; others arent as important</span>";
     echo "<span class='dev-note'>Should i put a password on the file; or is it hard enough finding the new site</span>";
@@ -30,20 +24,24 @@ class EditPage extends BasePage{
     $this->dropDown("Location*", "location_id", "LocationModel", "name", "id");
     $this->textEntry("Summary*", "summary");
     $this->longEntry("Intro*", "intro");
-    $this->fixedEntry("Rules", "rules");
-    $this->fixedEntry("Specification", "specification");
-    $this->textEntry("Domain", "domain");
+    $this->longEntry("Rules", "rules");
+    $this->image("Background*", "image_1", "/Background");
+    $this->image("Thumbnail 1*", "image_2", "/Content/Thumbnails");
+    $this->image("Thumbnail 2*", "image_3", "/Content/Thumbnails");
+    $this->textEntry("Date(Finals)*", "date_final");
+    $this->textEntry("Date(Elims)*", "date_elim");
     $this->textEntry("Entry Fee*", "entry_fee");
-    $this->textEntry("Max participants in a group*", "participants");
+
     $this->textEntry("1st Prize*", "prize_first");
     $this->textEntry("2nd Prize*", "prize_second");
     $this->textEntry("3rd Prize*", "prize_third");
+    $this->textEntry("Prize-info*","prize_info");
+
+    $this->textEntry("Max participants in a group*", "participants");
     $this->textEntry("Co-ordinator", "coordinator");
     $this->textEntry("Event Head", "event_head");
-    $this->textEntry("Date*", "date");
-    $this->image("Background*", "image_1", "/Backgrounds");
-    $this->image("Image 2*", "image_2", "");
-    $this->image("Image 3*", "image_3", "");
+    $this->fixedEntry("Specification", "specification");
+    $this->textEntry("Domain", "domain");
     echo "<div class='info-item'>";
       echo "<div class='info-label'></div>";
       echo "<input type='submit' name='save' value='Done'>";
@@ -95,6 +93,10 @@ class EditPage extends BasePage{
     echo "<div class='info-item'>";
       echo "<div class='info-label'>$label</div>";
       echo "<select name='$name'>";
+//       Put default value
+      $selected = ($entry=="")?"selected='selected'":"";
+      echo "<option $selected value=''>".$entry."</option>";
+// 	 The images in a folder
       while($entry = $dir->read()){
 	$selected = ($entry==$value)?"selected='selected'":"";
 	echo "<option $selected value='".$entry."'>".$entry."</option>";

@@ -1,4 +1,8 @@
 # Options +FollowSymlinks
 RewriteEngine off
-# RewriteRule   ^(.*)$ index.php?page=Enquiry [QSA,L]
-# RewriteRule .* - [L]
+#HTML5 Video
+AddType video/ogg .ogv
+AddType video/ogg .ogv
+AddType video/mp4 .mp4
+
+# another htaccess in Static/

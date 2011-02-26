@@ -8,7 +8,7 @@ class BasePage {
     $items = ArticleModel::getList();
     $old_sec=null;
     $old_cat=null;
-    echo "\n<ul class='homenav'>\n";
+    echo "\n<ul id='eventlist'>\n";
     while($item = $items->getAssoc()) 
     { 
       if($item["cat_title"] != $old_cat)
@@ -16,9 +16,9 @@ class BasePage {
 	//A new section, make a new header
 	if($old_cat!=null) echo "\n\t\t</ul></li>"; //Close the old cat
 	if($old_sec!=null) echo "\n\t</ul></li>"; //Close the old section
- 	echo "\n\t<li>";
-	echo "\n\t\t<a href='#'>".$item["cat_title"]."</a>";
-	echo "\n\t\t<ul class='homenav-category ".$item["cat_title"]."'>";
+ 	echo "\n\t<li  class='eventlist-category'>";
+	echo "\n\t\t<div class='eventlist-category-title'>".$item["cat_title"]."</div>";
+	echo "\n\t\t<ul>";
 	$old_cat=$item["cat_title"];
 	$old_sec=null;
       }
@@ -27,22 +27,19 @@ class BasePage {
       {
 	//A new section, make a new header
 	if($old_sec!=null) echo "\n\t\t</ul></li>"; //Close the old section
- 	echo "\n\t\t<li>";
-	echo "\n\t\t\t<a href='#'>".$item["sec_title"]."</a>";
- 	echo "\n\t\t\t<ul class='homenav-section ".$item["sec_title"]."'>";
+ 	echo "\n\t\t<li  class='eventlist-section'>";
+	echo "\n\t\t\t<div class='eventlist-section-title'>".$item["sec_title"]."</div>";
+ 	echo "\n\t\t\t<ul>";
 	$old_sec=$item["sec_id"];
       }
 
-      echo "\n\t\t\t\t<li><a class='homenav-item' href='?article=".$item["id"]."' >";
+      echo "\n\t\t\t\t<li class='eventlist-item'><a  href='?article=".$item["id"]."' >";
       echo $item["title"];
       echo "</a></li>";
     }
     echo "</ul></ul>\n</ul>";
+
   }  function echoTitle(){}
   function echoHead()
-  {
-  ?>
-    <link rel='stylesheet' type='text/css' href='Static/Css/menu.php'/>
-  <?php
-  }
+  {  }
 } 

@@ -6,11 +6,13 @@ class ArticleModel extends BaseModel{
   static function getInstance($id){
     $id = intval($id);
     $sql = "SELECT art.*,
-		    cat.id AS cat_id, cat.title AS category,
-		    sec.id AS sec_id, sec.title AS section 
+		    cat.id AS cat_id, cat.title AS cat_title,
+		    sec.id AS sec_id, sec.title AS sec_title,
+		    loc.id AS loc_id, loc.name as location
 	    FROM articles AS art
 	    JOIN categories AS cat ON art.category_id=cat.id 
 	    JOIN sections AS sec ON sec.id=art.section_id
+	    JOIN locations AS loc ON loc.id=art.location_id
 	    WHERE art.id=$id
 	    ORDER BY cat.title, sec.id";
 //     echo "<pre>$sql</pre>";
@@ -23,10 +25,12 @@ class ArticleModel extends BaseModel{
 // 	    loc.id as loc_id, loc.name as loc_name, loc.floor as loc_floor,
     $sql = "SELECT art.*,
 		    cat.id AS cat_id, cat.title AS cat_title,
-		    sec.id AS sec_id, sec.title AS sec_title 
+		    sec.id AS sec_id, sec.title AS sec_title,
+		    loc.id AS loc_id, loc.name as location
 	    FROM articles AS art
 	    JOIN categories AS cat ON art.category_id=cat.id 
 	    JOIN sections AS sec ON sec.id=art.section_id
+	    JOIN locations AS loc ON loc.id=art.location_id
 	    ORDER BY cat.title DESC, sec.id";
     $result = BaseModel::$database->query($sql);
     return new ArticleModelList($result);
@@ -52,9 +56,11 @@ class ArticleModel extends BaseModel{
     self::textEntry("1st Prize", "prize_first");
     self::textEntry("2nd Prize", "prize_second");
     self::textEntry("3rd Prize", "prize_third");
+    self::textEntry("Prize Info", "prize_info");
     self::textEntry("Co-ordinator", "coordinator");
     self::textEntry("Event Head", "event_head");
-    self::textEntry("Date", "date");
+    self::textEntry("Date", "date_elim");
+    self::textEntry("Date", "date_final");
     self::textEntry("Image 1", "image_1");
     self::textEntry("Image 2", "image_2");
     self::textEntry("Image 3", "image_3");
@@ -66,7 +72,7 @@ class ArticleModel extends BaseModel{
   }/*HACK ZONE*/
 
   private static function entry($name){
-    self::$set[] = $name."='".self::$request[$name]."'";
+    self::$set[] = $name."='".BaseModel::$database->real_escape_string(self::$request[$name])."'";
   }
   private static function textEntry($label, $name) {
     self::entry($name);
